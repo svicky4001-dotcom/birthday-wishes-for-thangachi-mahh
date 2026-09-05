@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#ff5fa2">
+
+  <title>Birthday Surprise 🎂</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: "Poppins", sans-serif;
+      color: #fff;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at top left, #ffb6d9 0%, transparent 35%),
+        radial-gradient(circle at bottom right, #b98cff 0%, transparent 35%),
+        linear-gradient(135deg, #ff6fae, #c56cf0);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        radial-gradient(circle, rgba(255,255,255,.7) 1px, transparent 1px);
+      background-size: 35px 35px;
+      opacity: .25;
+      z-index: -1;
+    }
+
+    .screen {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 25px;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 520px;
+      padding: 40px 28px;
+      text-align: center;
+      border-radius: 35px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.3);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow:
+        0 25px 70px rgba(70, 20, 100, .25),
+        inset 0 1px 1px rgba(255,255,255,.35);
+      animation: cardIn 1s ease;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .small-text {
+      font-size: 14px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: .85;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(34px, 9vw, 55px);
+      line-height: 1.15;
+      margin-bottom: 15px;
+      text-shadow: 0 5px 20px rgba(0,0,0,.15);
+    }
+
+    h2 {
+      font-family: "Pacifico", cursive;
+      font-size: clamp(25px, 7vw, 38px);
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 16px;
+      line-height: 1.8;
+      opacity: .95;
+    }
+
+    .gift {
+      font-size: 95px;
+      margin-bottom: 20px;
+      animation: giftBounce 1.5s ease-in-out infinite;
+      filter: drop-shadow(0 10px 15px rgba(0,0,0,.15));
+    }
+
+    .cake {
+      font-size: 90px;
+      margin: 20px 0;
+      animation: float 2s ease-in-out infinite;
+    }
+
+    .heart {
+      font-size: 55px;
+      margin-bottom: 15px;
+      animation: heartbeat 1.2s infinite;
+    }
+
+    .btn {
+      border: none;
+      outline: none;
+      padding: 15px 30px;
+      margin-top: 25px;
+      border-radius: 50px;
+      background: #fff;
+      color: #e74791;
+      font-family: "Poppins", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 12px 30px rgba(0,0,0,.18);
+      transition: all .3s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-4px) scale(1.04);
+      box-shadow: 0 18px 35px rgba(0,0,0,.25);
+    }
+
+    .btn:active {
+      transform: scale(.96);
+    }
+
+    .message {
+      margin-top: 25px;
+      padding: 23px;
+      border-radius: 25px;
+      background: rgba(255,255,255,.13);
+      border: 1px solid rgba(255,255,255,.2);
+    }
+
+    .message p {
+      margin-bottom: 15px;
+    }
+
+    .message p:last-child {
+      margin-bottom: 0;
+    }
+
+    .signature {
+      margin-top: 20px;
+      font-family: "Pacifico", cursive;
+      font-size: 22px;
+    }
+
+    .final-title {
+      font-family: "Pacifico", cursive;
+      font-size: clamp(32px, 9vw, 48px);
+      font-weight: 400;
+      margin-bottom: 15px;
+    }
+
+    .emoji-row {
+      font-size: 45px;
+      margin: 20px 0;
+      letter-spacing: 8px;
+    }
+
+    /* Floating Hearts */
+
+    .floating-heart {
+      position: fixed;
+      bottom: -50px;
+      pointer-events: none;
+      z-index: 1000;
+      animation: heartRise linear forwards;
+    }
+
+    /* Confetti */
+
+    .confetti {
+      position: fixed;
+      top: -30px;
+      pointer-events: none;
+      z-index: 999;
+      animation: confettiFall linear forwards;
+    }
+
+    /* Sparkles */
+
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 998;
+      animation: sparkleAnimation 1.5s ease-out forwards;
+    }
+
+    /* Animations */
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(40px) scale(.94);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes giftBounce {
+      0%, 100% {
+        transform: translateY(0) rotate(0deg);
+      }
+
+      50% {
+        transform: translateY(-15px) rotate(4deg);
+      }
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-12px);
+      }
+    }
+
+    @keyframes heartbeat {
+      0%, 100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.18);
+      }
+    }
+
+    @keyframes heartRise {
+      0% {
+        transform: translateY(0) scale(.7) rotate(0deg);
+        opacity: 0;
+      }
+
+      15% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(-115vh) scale(1.4) rotate(25deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes confettiFall {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(115vh) rotate(720deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes sparkleAnimation {
+      0% {
+        transform: scale(0);
+        opacity: 0;
+      }
+
+      50% {
+        transform: scale(1.5);
+        opacity: 1;
+      }
+
+      100% {
+        transform: scale(0);
+        opacity: 0;
+      }
+    }
+
+    /* Mobile */
+
+    @media (max-width: 480px) {
+
+      .screen {
+        padding: 16px;
+      }
+
+      .card {
+        padding: 35px 20px;
+        border-radius: 30px;
+      }
+
+      .gift {
+        font-size: 75px;
+      }
+
+      .cake {
+        font-size: 70px;
+      }
+
+      .heart {
+        font-size: 45px;
+      }
+
+      p {
+        font-size: 15px;
+      }
+
+      .message {
+        padding: 18px;
+      }
+
+      .btn {
+        padding: 14px 25px;
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       WELCOME SCREEN
+  ========================== -->
+
+  <main class="screen" id="welcomeScreen">
+
+    <div class="card">
+
+      <div class="small-text">
+        A Little Surprise For You ✨
+      </div>
+
+      <div class="gift">
+        🎁
+      </div>
+
+      <h1>Hey Thangachi! 💕</h1>
+
+      <p>
+        Unakkaga oru special surprise ready-aa irukku...
+        Open pannitu paaru! 👀💖
+      </p>
+
+      <button class="btn" onclick="openSurprise()">
+        Open Your Surprise 🎁
+      </button>
+
+    </div>
+
+  </main>
+
+
+  <!-- =========================
+       BIRTHDAY SCREEN
+  ========================== -->
+
+  <main class="screen hidden" id="birthdayScreen">
+
+    <div class="card">
+
+      <div class="heart">
+        💖
+      </div>
+
+      <div class="small-text">
+        Today Is Your Special Day ✨
+      </div>
+
+      <h1>
+        Happy Birthday!
+      </h1>
+
+      <h2>
+        My Sweet Thangachi 🥰
+      </h2>
+
+      <div class="cake">
+        🎂
+      </div>
+
+      <div class="message">
+
+        <p>
+          Un life full-ah happiness,
+          success and beautiful memories
+          niraya irukkanum. ❤️
+        </p>
+
+        <p>
+          Nee eppovume ippadiye
+          happy-ah smile pannitu irukkanum. 😊✨
+        </p>
+
+        <p>
+          Un dreams ellam one by one
+          true aaganum. 🌸
+        </p>
+
+        <p>
+          No matter what happens,
+          always keep smiling and shining! 💕
+        </p>
+
+        <div class="signature">
+          Lots of Love ❤️
+        </div>
+
+      </div>
+
+      <button class="btn" onclick="showFinal()">
+        One More Surprise ✨
+      </button>
+
+    </div>
+
+  </main>
+
+
+  <!-- =========================
+       FINAL SCREEN
+  ========================== -->
+
+  <main class="screen hidden" id="finalScreen">
+
+    <div class="card">
+
+      <div class="gift">
+        🎉
+      </div>
+
+      <div class="small-text">
+        One Last Thing...
+      </div>
+
+      <div class="final-title">
+        Happy Birthday! ❤️
+      </div>
+
+      <h2>
+        Thangachi! 🥰
+      </h2>
+
+      <div class="emoji-row">
+        🎂 🎁 🎈
+      </div>
+
+      <p>
+        Keep Smiling 😊<br>
+        Keep Shining ✨<br>
+        Keep Being Awesome 💖
+      </p>
+
+      <p style="margin-top:20px;">
+        Have the most beautiful birthday
+        and an amazing year ahead! 🌸
+      </p>
+
+      <button class="btn" onclick="celebrate()">
+        Celebrate! 🎉
+      </button>
+
+    </div>
+
+  </main>
+
+
+  <script>
+
+    /* =========================
+       OPEN SURPRISE
+    ========================== */
+
+    function openSurprise() {
+
+      document
+        .getElementById("welcomeScreen")
+        .classList.add("hidden");
+
+      document
+        .getElementById("birthdayScreen")
+        .classList.remove("hidden");
+
+      createConfetti(60);
+      createHearts(20);
+      createSparkles(25);
+    }
+
+
+    /* =========================
+       SHOW FINAL SCREEN
+    ========================== */
+
+    function showFinal() {
+
+      document
+        .getElementById("birthdayScreen")
+        .classList.add("hidden");
+
+      document
+        .getElementById("finalScreen")
+        .classList.remove("hidden");
+
+      createConfetti(80);
+      createHearts(25);
+      createSparkles(30);
+    }
+
+
+    /* =========================
+       CELEBRATE
+    ========================== */
+
+    function celebrate() {
+
+      createConfetti(100);
+      createHearts(35);
+      createSparkles(40);
+
+      setTimeout(() => {
+        createConfetti(70);
+      }, 1000);
+
+      setTimeout(() => {
+        createConfetti(70);
+      }, 2000);
+
+      setTimeout(() => {
+        createHearts(25);
+      }, 1500);
+    }
+
+
+    /* =========================
+       CONFETTI
+    ========================== */
+
+    function createConfetti(amount) {
+
+      const emojis = [
+        "🎉",
+        "🎊",
+        "✨",
+        "💖",
+        "💕",
+        "🌸",
+        "⭐",
+        "💗",
+        "🥳",
+        "🎈"
+      ];
+
+      for (let i = 0; i < amount; i++) {
+
+        const item = document.createElement("div");
+
+        item.className = "confetti";
+
+        item.innerHTML =
+          emojis[
+            Math.floor(Math.random() * emojis.length)
+          ];
+
+        item.style.left =
+          Math.random() * 100 + "vw";
+
+        item.style.fontSize =
+          Math.random() * 18 + 10 + "px";
+
+        item.style.animationDuration =
+          Math.random() * 3 + 3 + "s";
+
+        item.style.animationDelay =
+          Math.random() * 1.5 + "s";
+
+        document.body.appendChild(item);
+
+        setTimeout(() => {
+          item.remove();
+        }, 7000);
+      }
+    }
+
+
+    /* =========================
+       FLOATING HEARTS
+    ========================== */
+
+    function createHearts(amount) {
+
+      for (let i = 0; i < amount; i++) {
+
+        const heart = document.createElement("div");
+
+        heart.className = "floating-heart";
+
+        const hearts = [
+          "❤️",
+          "💖",
+          "💕",
+          "💗",
+          "💓",
+          "💞"
+        ];
+
+        heart.innerHTML =
+          hearts[
+            Math.floor(Math.random() * hearts.length)
+          ];
+
+        heart.style.left =
+          Math.random() * 100 + "vw";
+
+        heart.style.fontSize =
+          Math.random() * 20 + 18 + "px";
+
+        heart.style.animationDuration =
+          Math.random() * 4 + 5 + "s";
+
+        heart.style.animationDelay =
+          Math.random() * 2 + "s";
+
+        document.body.appendChild(heart);
+
+        setTimeout(() => {
+          heart.remove();
+        }, 8000);
+      }
+    }
+
+
+    /* =========================
+       SPARKLES
+    ========================== */
+
+    function createSparkles(amount) {
+
+      for (let i = 0; i < amount; i++) {
+
+        setTimeout(() => {
+
+          const sparkle =
+            document.createElement("div");
+
+          sparkle.className = "sparkle";
+
+          sparkle.innerHTML = "✨";
+
+          sparkle.style.left =
+            Math.random() * 100 + "vw";
+
+          sparkle.style.top =
+            Math.random() * 100 + "vh";
+
+          sparkle.style.fontSize =
+            Math.random() * 20 + 10 + "px";
+
+          document.body.appendChild(sparkle);
+
+          setTimeout(() => {
+            sparkle.remove();
+          }, 1600);
+
+        }, Math.random() * 2500);
+      }
+    }
+
+  </script>
+
+</body>
+</html>
